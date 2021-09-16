@@ -10,6 +10,17 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
+            var result = RunWithAccum(input, (l,w,h) =>
+            {
+                var sides = new[] {l * w, w * h, h * l};
+                return 2 * sides.Sum() + sides.Min();
+            });
+
+            return result.ToString();
+        }
+
+        public static int RunWithAccum(string input, Func<int, int, int, int> func)
+        {
             var result = 0;
             using var reader = new StringReader(input);
             while (true)
@@ -17,16 +28,15 @@ namespace Advent.AoC2015
                 var line = reader.ReadLine();
                 if (String.IsNullOrEmpty(line))
                 {
-                    return result.ToString();
+                    return result;
                 }
 
                 var (l, w, h) = SplitsToTuple(line.Split('x'));
-                var sides = new[] {l * w, w * h, h * l};
-                result += 2 * sides.Sum() + sides.Min();
+                result += func(l,w,h);
             }
         }
 
-        private (int, int, int) SplitsToTuple(string[] splits)
+        public static (int, int, int) SplitsToTuple(string[] splits)
         {
             return (int.Parse(splits[0]),
                 int.Parse(splits[1]),
