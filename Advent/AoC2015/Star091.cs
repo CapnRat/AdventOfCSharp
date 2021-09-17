@@ -10,6 +10,11 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
+            return GetRouteDistances(input).Min().ToString();
+        }
+
+        public static IEnumerable<int> GetRouteDistances(string input)
+        {
             var locations = new HashSet<string>();
             var distances = new Dictionary<string, int>();
             var lines = Utility.InputToLines(input);
@@ -26,7 +31,7 @@ namespace Advent.AoC2015
                 distances.Add(locRight + locLeft, distance);
             }
 
-            return new Permutations<string>(locations, GenerateOption.WithoutRepetition).Select(route =>
+            var routeDistances = new Permutations<string>(locations, GenerateOption.WithoutRepetition).Select(route =>
             {
                 var distance = 0;
                 for (var i = 0; i < route.Count - 1; i++)
@@ -35,7 +40,8 @@ namespace Advent.AoC2015
                 }
 
                 return distance;
-            }).Min().ToString();
+            });
+            return routeDistances;
         }
     }
 }
