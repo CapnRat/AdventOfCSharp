@@ -8,12 +8,7 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
-            var candidate = input.ToArray();
-            while (true)
-            {
-                candidate = IncrementDigit(candidate, candidate.Length - 1);
-                if (IsValid(candidate)) return new string(candidate);
-            }
+            return new string(GetNextPassword(input.ToArray()));
         }
 
         public override string GetInput()
@@ -21,7 +16,16 @@ namespace Advent.AoC2015
             return "hepxcrrq";
         }
 
-        private char[] IncrementDigit(char[] candidate, int digit)
+        public static char[] GetNextPassword(char[] candidate)
+        {
+            while (true)
+            {
+                candidate = IncrementDigit(candidate, candidate.Length - 1);
+                if (IsValid(candidate)) return candidate;
+            }
+        }
+
+        private static char[] IncrementDigit(char[] candidate, int digit)
         {
             if (++candidate[digit] <= 'z') return candidate;
             
@@ -30,7 +34,7 @@ namespace Advent.AoC2015
 
         }
 
-        private bool IsValid(char[] candidate)
+        private static bool IsValid(char[] candidate)
         {
             var hasStraight = false;
             var firstDouble = -2;
