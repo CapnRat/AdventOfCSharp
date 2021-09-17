@@ -10,6 +10,33 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
+            var (people, happiness) = ProcessInput(input);
+
+            return GetBestValue(people, happiness).ToString();
+        }
+
+        public static int GetBestValue(HashSet<string> people, Dictionary<string, int> happiness)
+        {
+            var bestValue = new Permutations<string>(people).Max(table =>
+            {
+                var sum = 0;
+                for (int i = 0; i < table.Count; i++)
+                {
+                    var leftIndex = i == 0 ? table.Count - 1 : i - 1;
+                    var rightIndex = i == table.Count - 1 ? 0 : i + 1;
+
+                    var leftKey = table[i] + table[leftIndex];
+                    var rightKey = table[i] + table[rightIndex];
+                    sum += (happiness.ContainsKey(leftKey) ? happiness[leftKey] : 0) + (happiness.ContainsKey(rightKey) ? happiness[rightKey] : 0);
+                }
+
+                return sum;
+            });
+            return bestValue;
+        }
+
+        public static (HashSet<string> people, Dictionary<string, int> happiness) ProcessInput(string input)
+        {
             var people = new HashSet<string>();
             var happiness = new Dictionary<string, int>();
             foreach (var line in Utility.InputToLines(input))
@@ -23,20 +50,8 @@ namespace Advent.AoC2015
                 people.Add(person);
                 happiness.Add(person + otherPerson, value);
             }
-            
-            return new Permutations<string>(people).Max(table =>
-            {
-                var sum = 0;
-                for (int i = 0; i < table.Count; i++)
-                {
-                    var leftIndex = i == 0 ? table.Count - 1 : i - 1;
-                    var rightIndex = i == table.Count - 1 ? 0 : i + 1;
 
-                    sum += happiness[table[i] + table[leftIndex]] + happiness[table[i] + table[rightIndex]];
-                }
-
-                return sum;
-            }).ToString();
+            return (people, happiness);
         }
     }
 }
