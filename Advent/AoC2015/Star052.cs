@@ -8,7 +8,7 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
-            return Star051.InputToLines(input).Count(l =>
+            return Utility.InputToLines(input).Count(l =>
             {
                 var doubled = false;
                 var sandwiched = false;
