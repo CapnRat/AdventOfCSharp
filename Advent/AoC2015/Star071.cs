@@ -34,13 +34,13 @@ namespace Advent.AoC2015
             return EvaluateWire(input, "a").ToString();
         }
 
-        public static int EvaluateWire(string input, string wire)
+        public static ushort EvaluateWire(string input, string wire)
         {
             var wires = Utility.InputToLines(input).Select(ParseWire).ToDictionary(w => w.Name);
             return ResolveWire(wires, wire);
         }
 
-        private static ushort ResolveWire(IDictionary<string,Wire> wires, string name)
+        public static ushort ResolveWire(IDictionary<string,Wire> wires, string name)
         {
             ushort value = 0;
             if (ushort.TryParse(name, out value))
