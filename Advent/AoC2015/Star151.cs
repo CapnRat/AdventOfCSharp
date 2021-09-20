@@ -11,14 +11,22 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
-            var ingredients = Utility.InputToLines(input).Select(l =>l.Split(" ").Select(s => s.Trim(':').Trim(',')).Where(s => int.TryParse(s, out _)).Select(s => int.Parse(s)).ToArray()).ToArray();
+            var ingredients = GetIngredientsFromInput(input);
 
-            return GetCookies(ingredients).Max().ToString();
+            return GetCookies(ingredients).Max(c => c.Item1).ToString();
         }
 
-        private IEnumerable<int> GetCookies(int[][] ingredients)
+        public static int[][] GetIngredientsFromInput(string input)
         {
-            var cookies = new List<int>();
+            var ingredients = Utility.InputToLines(input).Select(l =>
+                l.Split(" ").Select(s => s.Trim(':').Trim(',')).Where(s => int.TryParse(s, out _)).Select(s => int.Parse(s))
+                    .ToArray()).ToArray();
+            return ingredients;
+        }
+
+        public static IEnumerable<(int, int)> GetCookies(int[][] ingredients)
+        {
+            var cookies = new List<(int, int)>();
             var amounts = new int[ingredients.Length];
             
             Assemble(0, 100, cookies, ingredients, ref amounts);
@@ -26,22 +34,25 @@ namespace Advent.AoC2015
             return cookies;
         }
 
-        private void Assemble(int ingredient, int remaining, List<int> cookies, int[][] ingredients, ref int[] amounts)
+        private static void Assemble(int ingredient, int remaining, List<(int, int)> cookies, int[][] ingredients, ref int[] amounts)
         {
             if (ingredient == ingredients.Length - 1)
             {
                 amounts[ingredient] = remaining;
                 
                 var values = new int[ingredients[0].Length - 1];
+                var calories = 0;
                 for (var i = 0; i < ingredients.Length; i++)
                 {
                     for (var p = 0; p < ingredients[i].Length - 1; p++)  // ignore calories
                     {
                         values[p] += ingredients[i][p] * amounts[i];
                     }
+
+                    calories += ingredients[i][values.Length] * amounts[i];
                 }
 
-                cookies.Add(values.Aggregate((total, next) => total * (next < 0 ? 0 : next)));
+                cookies.Add((values.Aggregate((total, next) => total * (next < 0 ? 0 : next)), calories));
 
                 return;
             }
