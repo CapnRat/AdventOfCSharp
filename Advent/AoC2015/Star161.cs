@@ -7,7 +7,7 @@ namespace Advent.AoC2015
     [Solution(15,16,1)]
     public class Star161 : Solution
     {
-        private Dictionary<string, int> KeyToIndex = new Dictionary<string, int>()
+        public static readonly Dictionary<string, int> KeyToIndex = new Dictionary<string, int>()
         {
             ["children"] = 0,
             ["cats"] = 1,
@@ -20,14 +20,15 @@ namespace Advent.AoC2015
             ["cars"] = 8,
             ["perfumes"] = 9
         };
-        
+
+        public static readonly int[] Requirements = {3, 7, 2, 3, 0, 0, 5, 3, 2, 1};
+
         public override string Run(string input)
         {
-            var requirements = new[] {3, 7, 2, 3, 0, 0, 5, 3, 2, 1};
-            return InputToSues(input).First(s => s.Item2.All(i => requirements[i.Item1] == i.Item2)).Item1.ToString();
+            return InputToSues(input).First(s => s.Item2.All(i => Requirements[i.Item1] == i.Item2)).Item1.ToString();
         }
 
-        private IEnumerable<(int, List<(int, int)>)> InputToSues(string input)
+        public static IEnumerable<(int, List<(int, int)>)> InputToSues(string input)
         {
             return Utility.InputToLines(input).Select(l =>
             {
