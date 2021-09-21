@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Advent.Common
 {
@@ -11,6 +13,11 @@ namespace Advent.Common
             string line;
             while ((line = reader.ReadLine()) != null)
                 yield return line;
+        }
+
+        public static IEnumerable<TResult> InputTo<TResult>(Func<string, TResult> func, string input)
+        {
+            return InputToLines(input).Select(func);
         }
     }
 }
