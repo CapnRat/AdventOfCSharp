@@ -1,0 +1,47 @@
+using System.Collections.Generic;
+using System.Linq;
+using Advent.Common;
+
+namespace Advent.AoC2015
+{
+    [Solution(15,16,1)]
+    public class Star161 : Solution
+    {
+        private Dictionary<string, int> KeyToIndex = new Dictionary<string, int>()
+        {
+            ["children"] = 0,
+            ["cats"] = 1,
+            ["samoyeds"] = 2,
+            ["pomeranians"] = 3,
+            ["akitas"] = 4,
+            ["vizslas"] = 5,
+            ["goldfish"] = 6,
+            ["trees"] = 7,
+            ["cars"] = 8,
+            ["perfumes"] = 9
+        };
+        
+        public override string Run(string input)
+        {
+            var requirements = new[] {3, 7, 2, 3, 0, 0, 5, 3, 2, 1};
+            return InputToSues(input).First(s => s.Item2.All(i => requirements[i.Item1] == i.Item2)).Item1.ToString();
+        }
+
+        private IEnumerable<(int, List<(int, int)>)> InputToSues(string input)
+        {
+            return Utility.InputToLines(input).Select(l =>
+            {
+                var splits = l.Split(" ").Select(s => s.Trim(':').Trim(',')).ToArray();
+
+                var sue = int.Parse(splits[1]);
+                var items = new List<(int, int)>();
+                for (int i = 0; i < 3; i++)
+                {
+                    items.Add((KeyToIndex[splits[2 * i + 2]], int.Parse(splits[2 * i + 3])));
+                }
+
+                return (sue, items);
+            });
+        }
+    }
+}
