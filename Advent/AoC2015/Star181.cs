@@ -23,8 +23,7 @@ namespace Advent.AoC2015
             return grid.Select(l => l.Count(c => c)).Sum();
         }
 
-        static readonly (int x, int y)[] Neighbors = new []
-        {
+        static readonly (int x, int y)[] Neighbors = {
             ( 1, 0),
             ( 1, 1),
             ( 0, 1),
@@ -35,7 +34,7 @@ namespace Advent.AoC2015
             ( 1,-1)
         };
         
-        private void RunIteration(bool[][] grid)
+        public static void RunIteration(bool[][] grid)
         {
             var input = grid.Select(l => l.ToArray()).ToArray();
 
@@ -55,7 +54,7 @@ namespace Advent.AoC2015
             }
         }
 
-        private bool TryGetNeighbor(bool[][] grid, int x, int y)
+        private static bool TryGetNeighbor(bool[][] grid, int x, int y)
         {
             if (x < 0 || x >= grid.Length)
                 return false;
