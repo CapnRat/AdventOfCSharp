@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Xml.Schema;
 using Advent.Common;
 
 namespace Advent.AoC2015
