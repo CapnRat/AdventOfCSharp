@@ -16,7 +16,7 @@ namespace Advent.AoC2015
             public int Armor;
         }
         
-        struct Item
+        public struct Item
         {
             public string Name;
             public int Cost;
@@ -24,7 +24,7 @@ namespace Advent.AoC2015
             public int Armor;
         }
 
-        private Item[] Weapons =
+        public static readonly Item[] Weapons =
         {
             new() {Name = "Dagger", Cost = 8, Damage = 4},
             new() {Name = "Shortsword", Cost = 10, Damage = 5},
@@ -33,7 +33,7 @@ namespace Advent.AoC2015
             new() {Name = "Greataxe", Cost = 74, Damage = 8}
         };
 
-        private Item[] Armors =
+        public static readonly Item[] Armors =
         {
             new() {Name = "None"},
             new() {Name = "Leather", Cost = 13, Armor = 1},
@@ -43,7 +43,7 @@ namespace Advent.AoC2015
             new() {Name = "Platemail", Cost = 102, Armor = 5}
         };
 
-        private Item[] Rings =
+        public static readonly Item[] Rings =
         {
             new() {Name = "None"},
             new() {Name = "Damage +1", Cost = 25, Damage = 1},
@@ -89,6 +89,11 @@ namespace Advent.AoC2015
             }
 
             return boss.HitPoints <= 0;
+        }
+
+        public override string GetInput()
+        {
+            return "";
         }
     }
 }
