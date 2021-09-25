@@ -10,13 +10,7 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
-            var lines = Utility.InputToLines(input).ToArray();
-            var molecule = lines[^1];
-            var replacementTuples = lines[..^2].Select(l =>
-            {
-                var splits = l.Split(" => ");
-                return (splits[0], splits[1]);
-            });
+            var (molecule, replacementTuples) = InputToData(input);
 
             var builder = new StringBuilder();
             var molecules = new HashSet<string>();
@@ -37,6 +31,18 @@ namespace Advent.AoC2015
                 }
             }
             return molecules.Count.ToString();
+        }
+
+        public static (string molecule, IEnumerable<(string, string)> replacementTuples) InputToData(string input)
+        {
+            var lines = Utility.InputToLines(input).ToArray();
+            var molecule = lines[^1];
+            var replacementTuples = lines[..^2].Select(l =>
+            {
+                var splits = l.Split(" => ");
+                return (splits[0], splits[1]);
+            });
+            return (molecule, replacementTuples);
         }
     }
 }
