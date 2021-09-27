@@ -14,6 +14,7 @@ namespace Advent.AoC2015
             public int HitPoints;
             public int Damage;
             public int Armor;
+            public int Mana;
         }
         
         public struct Item
