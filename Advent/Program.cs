@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Advent.AoC2015;
 using Advent.Common;
 
 namespace Advent
@@ -24,7 +23,7 @@ namespace Advent
             var (year, day, star) = DecodeIndex(index);
             Console.WriteLine($"Running Solution: Year {year}, Day {day}, Star {star}");
 
-            var input = solution.GetInput();
+            var input = solution?.GetInput();
             var sw = new Stopwatch();
             sw.Start();
             var result = solution?.Run(input);
