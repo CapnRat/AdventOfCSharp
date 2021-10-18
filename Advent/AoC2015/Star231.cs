@@ -9,9 +9,13 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
+            return RunProgram(input, new uint[]{0, 0});
+        }
+
+        public static string RunProgram(string input, uint[] registers)
+        {
             var program = Utility.InputToLines(input).ToArray();
-            
-            uint[] registers = new uint[2];
+
             int pointer = 0;
 
             while (pointer < program.Length)
@@ -53,7 +57,7 @@ namespace Advent.AoC2015
                         throw new InvalidProgramException();
                 }
             }
-            
+
             return registers[1].ToString();
         }
     }
