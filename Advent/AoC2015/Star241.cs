@@ -10,15 +10,20 @@ namespace Advent.AoC2015
     {
         public override string Run(string input)
         {
+            return Solve(input, 3);
+        }
+
+        public static string Solve(string input, int numGroups)
+        {
             var packages = Utility.InputTo(long.Parse, input).ToArray();
-            var groupMass = packages.Sum() / 3;
+            var groupMass = packages.Sum() / numGroups;
 
             for (int i = 2; i < packages.Length; i++)
             {
                 var groups = new Combinations<long>(packages, i).Where(c => c.Sum() == groupMass).ToArray();
 
                 if (groups.Length > 0)
-                    return groups.Select(g => g.Aggregate((long)1, (acc, val) => acc * val)).Min().ToString();
+                    return groups.Select(g => g.Aggregate((long) 1, (acc, val) => acc * val)).Min().ToString();
             }
 
             return "";
