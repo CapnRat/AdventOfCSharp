@@ -4,9 +4,9 @@ using NUnit.Framework;
 
 namespace AdventTests
 {
-    public abstract class SolutionTest<T> where T : Solution
+    public abstract class SolutionTest<T>
     {
-        protected T solution;
+        protected dynamic solution;
         
         [SetUp]
         public void Setup()
@@ -14,9 +14,9 @@ namespace AdventTests
             solution = Activator.CreateInstance<T>();
         }
 
-        public virtual void Run(string input, string expected)
+        public void Run(string input, string expected)
         {
-            Assert.AreEqual(expected, solution.Run(input));
+            Assert.AreEqual(expected, solution.Run(input).ToString());
         }
     }
 }

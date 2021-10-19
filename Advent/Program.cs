@@ -6,27 +6,26 @@ using Advent.Common;
 
 namespace Advent
 {
-    class Runner
+    static class Runner
     {
         static void Main(string[] args)
         {
             var solutions = Assembly.GetCallingAssembly().GetTypes()
-                .Where(t => t.GetCustomAttributes(typeof(SolutionAttribute), false).Any()
-                )
+                .Where(t => t.GetCustomAttributes(typeof(SolutionAttribute), false).Any())
                 .ToDictionary(type => 
                     EncodeIndex(type.GetCustomAttributes(typeof(SolutionAttribute), false)
                     .First() as SolutionAttribute)
                 );
 
             var index = args.Length > 0 ? int.Parse(args[0]) : solutions.Keys.Max();
-            var solution = Activator.CreateInstance(solutions[index]) as Solution;
+            dynamic solution = Activator.CreateInstance(solutions[index]);
             var (year, day, star) = DecodeIndex(index);
             Console.WriteLine($"Running Solution: Year {year}, Day {day}, Star {star}");
 
             var input = solution?.GetInput();
             var sw = new Stopwatch();
             sw.Start();
-            var result = solution?.Run(input);
+            var result = solution?.Run(input).ToString();
             sw.Stop();
             Console.WriteLine("Time {0}ms", sw.ElapsedMilliseconds);
             Console.WriteLine(result);
