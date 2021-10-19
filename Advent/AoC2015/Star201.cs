@@ -8,7 +8,7 @@ namespace Advent.AoC2015
         public override string Run(string input)
         {
             int target = int.Parse(input);
-            var presents = new int[target / 10];
+            var presents = new int[target / 5];
             for (int elf = 1; elf < presents.Length; elf++)
             {
                 for (int house = elf; house < presents.Length; house += elf)
