@@ -14,9 +14,9 @@ namespace AdventTests
             solution = Activator.CreateInstance<T>();
         }
 
-        public void Run(string input, string expected)
+        protected void Run(string input, dynamic expected)
         {
-            Assert.AreEqual(expected, solution.Run(input).ToString());
+            Assert.AreEqual(expected, solution.Run(input));
         }
     }
 }
