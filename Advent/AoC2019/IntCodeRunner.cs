@@ -6,9 +6,21 @@ namespace Advent.AoC2019
     {
         private int _pointer;
         
-        public int[] Program { get; }
+        public int[] Program { get; private set; }
 
+        public IntCodeRunner()
+        {
+            this.Program = new int[0];
+            this._pointer = 0;
+        }
+        
         public IntCodeRunner(int[] program)
+        {
+            this.Program = program;
+            this._pointer = 0;
+        }
+
+        public void Reset(int[] program)
         {
             this.Program = program;
             this._pointer = 0;
