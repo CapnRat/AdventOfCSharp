@@ -15,6 +15,11 @@ namespace Advent.Common
                 yield return line;
         }
 
+        public static int[] InputToIntCode(string input)
+        {
+            return input.Split(',').Select(int.Parse).ToArray();
+        }
+
         public static IEnumerable<TResult> InputTo<TResult>(Func<string, TResult> func, string input)
         {
             return InputToLines(input).Select(func);
