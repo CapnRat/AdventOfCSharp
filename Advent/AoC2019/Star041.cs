@@ -23,10 +23,15 @@ namespace Advent.AoC2019
             
             if (!DoubleDigits.Any(d => sValue.Contains(d))) return false;
 
-            var sorted = new char[6];
-            sValue.ToArray().CopyTo(sorted, 0);
+            return IsSorted(sValue);
+        }
+
+        public static bool IsSorted(string value)
+        {
+            var sorted = new char[value.Length];
+            value.ToArray().CopyTo(sorted, 0);
             Array.Sort(sorted);
-            return sValue.SequenceEqual(sorted);
+            return value.SequenceEqual(sorted);
         }
     }
 }
