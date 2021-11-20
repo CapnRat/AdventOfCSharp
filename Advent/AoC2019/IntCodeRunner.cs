@@ -59,11 +59,38 @@ namespace Advent.AoC2019
                             case 2:
                                 Program[outPos] = Program[leftPos] * Program[rightPos];
                                 break;
+                            case 7:
+                                Program[outPos] = Program[leftPos] < Program[rightPos] ? 1 : 0;
+                                break;
+                            case 8:
+                                Program[outPos] = Program[leftPos] == Program[rightPos] ? 1 : 0;
+                                break;
                             default:
                                 throw new InvalidProgramException();
                         }
 
                         _pointer += 4;
+
+                        break;
+                    }
+                    case 3:
+                    {
+                        var firstPos = GetParam(instruction, 1);
+                        var secondPos = GetParam(instruction, 2);
+
+                        switch (opCode)
+                        {
+                            case 5:
+                                if (Program[firstPos] != 0) _pointer = Program[secondPos];
+                                else _pointer += 3;
+                                break;
+                            case 6:
+                                if (Program[firstPos] == 0) _pointer = Program[secondPos];
+                                else _pointer += 3;
+                                break;
+                            default:
+                                throw new InvalidProgramException();
+                        }
 
                         break;
                     }
@@ -106,7 +133,8 @@ namespace Advent.AoC2019
         {
             return opCode switch
             {
-                1 or 2 => 4,
+                1 or 2 or 7 or 8 => 4,
+                5 or 6 => 3,
                 3 or 4 => 2,
                 _ => throw new InvalidProgramException()
             };
