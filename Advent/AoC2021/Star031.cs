@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Advent.Common;
 
 namespace Advent.AoC2021
@@ -7,8 +8,14 @@ namespace Advent.AoC2021
     {
         public override int Run(string input)
         {
+            var (gamma, epsilon) = GetGammaEpsilon(Utility.InputToLines(input));
+            return gamma * epsilon;
+        }
+
+        public static (int gamma, int epsilon) GetGammaEpsilon(IEnumerable<string> lines)
+        {
             int[] bitCounts = null;
-            foreach (var line in Utility.InputToLines(input))
+            foreach (var line in lines)
             {
                 bitCounts ??= new int[line.Length];
 
@@ -25,11 +32,11 @@ namespace Advent.AoC2021
             {
                 gamma <<= 1;
                 epsilon <<= 1;
-                if (count > 0) gamma += 1;
-                else epsilon += 1;
+                if (count >= 0) gamma += 1;
+                if (count < 0) epsilon += 1;
             }
 
-            return gamma * epsilon;
+            return (gamma, epsilon);
         }
     }
 }
