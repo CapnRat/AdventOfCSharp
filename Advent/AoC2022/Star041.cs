@@ -7,7 +7,7 @@ namespace Advent.AoC2022
     [Solution(22, 4,1)]
     public class Star041 : Solution<int>
     {
-        private IEnumerable<int> SplitToIDs(string split)
+        public static IEnumerable<int> SplitToIDs(string split)
         {
             var range = split.Split('-').Select(int.Parse).ToArray();
             return Enumerable.Range(range[0], range[1] + 1 - range[0]);
