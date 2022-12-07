@@ -47,7 +47,7 @@ namespace Advent.AoC2022
             FileNode,
         }
 
-        public void GetTotalSizes(Dir dir, int maxSize, ref int totalSize)
+        public static void GetTotalSizes(Dir dir, int maxSize, ref int totalSize)
         {
             var size = dir.Size;
             if (dir.Size <= maxSize)
@@ -55,8 +55,8 @@ namespace Advent.AoC2022
             foreach (var child in dir.Children.Where(n => n is Dir).Cast<Dir>())
                 GetTotalSizes(child, maxSize, ref totalSize);
         }
-        
-        public override int Run(string input)
+
+        public static Dir BuildFileSystemStructure(string input)
         {
             var root = new Dir {Name = "/"};
             var currentDir = root;
@@ -100,8 +100,13 @@ namespace Advent.AoC2022
                 }
             }
 
+            return root;
+        }
+        
+        public override int Run(string input)
+        {
             int totalSizes = 0;
-            GetTotalSizes(root, 100000, ref totalSizes);
+            GetTotalSizes(BuildFileSystemStructure(input), 100000, ref totalSizes);
             return totalSizes;
         }
     }
