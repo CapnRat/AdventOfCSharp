@@ -1,11 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Advent.Common
 {
     public abstract class Solution : Solution<string> {}
 
+    [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
     public abstract class Solution<T>
     {
         public abstract T Run(string input);
