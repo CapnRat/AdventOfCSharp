@@ -12,13 +12,11 @@ namespace Advent.AoC2022
             var visited = new HashSet<Star091.Position>();
 
             var rope = new Star091.Position[10];
-            var prev = new Star091.Position[10];
 
             foreach (var movement in Utility.InputTo(Star091.LineToMovement, input))
             {
                 for (int i = 0; i < movement.Distance; i++)
                 {
-                    rope.CopyTo(prev, 0);
                     rope[0].Add(movement.Direction);
 
                     for (int r = 1; r < rope.Length; r++)
