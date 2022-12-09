@@ -32,18 +32,7 @@ namespace Advent.AoC2022
             var head = new Position();
             var tail = new Position();
 
-            foreach (var movement in Utility.InputTo(l =>
-                     {
-                         var splits = l.Split(' ');
-                         return new Movement{ Direction = splits[0] switch
-                         {
-                             "U" => ( 0,  1),
-                             "L" => (-1,  0),
-                             "D" => ( 0, -1),
-                             "R" => ( 1,  0),
-                             _ => throw new ArgumentException()
-                         }, Distance = int.Parse(splits[1])};
-                     }, input))
+            foreach (var movement in Utility.InputTo(LineToMovement, input))
             {
                 for (int i = 0; i < movement.Distance; i++)
                 {
@@ -58,6 +47,23 @@ namespace Advent.AoC2022
             }
 
             return visited.Count;
+        }
+
+        public static Movement LineToMovement(string l)
+        {
+            var splits = l.Split(' ');
+            return new Movement
+            {
+                Direction = splits[0] switch
+                {
+                    "U" => (0, 1),
+                    "L" => (-1, 0),
+                    "D" => (0, -1),
+                    "R" => (1, 0),
+                    _ => throw new ArgumentException()
+                },
+                Distance = int.Parse(splits[1])
+            };
         }
     }
 }
