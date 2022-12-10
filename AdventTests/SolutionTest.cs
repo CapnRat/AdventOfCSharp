@@ -16,7 +16,14 @@ namespace AdventTests
 
         protected void Run(string input, dynamic expected)
         {
-            Assert.AreEqual(expected, solution.Run(input));
+            if (expected is string)
+                expected = (expected as string).Replace("\r", "");
+
+            var result = solution.Run(input);
+            if (result is string)
+                result = (result as string).Replace("\r", "");
+            
+            Assert.AreEqual(expected, result);
         }
     }
 }

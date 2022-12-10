@@ -13,8 +13,8 @@ namespace Advent.AoC2022
             AddX = 1
         }
 
-        public int[] CyclesLookup = { 1, 2 };
-        public HashSet<int> Samples = new() { 20, 60, 100, 140, 180, 220 };
+        public static int[] CyclesLookup = { 1, 2 };
+        public static HashSet<int> Samples = new() { 20, 60, 100, 140, 180, 220 };
         
         public override int Run(string input)
         {
@@ -22,11 +22,7 @@ namespace Advent.AoC2022
             int cycleCount = 1;
             int signalStrength = 0;
             
-            foreach (var instruction in Utility.InputTo<(Op operation, int value)>(l =>
-                     {
-                         var splits = l.Split(' ');
-                         return splits.Length == 1 ? (Op.Noop, 0) : (Op.AddX, int.Parse(splits[1]));
-                     }, input))
+            foreach (var instruction in Utility.InputTo(LineToInstruction, input))
             {
                 for (int cycleEnd = cycleCount + CyclesLookup[(int)instruction.operation];
                      cycleCount < cycleEnd;
@@ -49,6 +45,12 @@ namespace Advent.AoC2022
             }
 
             return signalStrength;
+        }
+
+        public static (Op operation, int value) LineToInstruction(string l)
+        {
+            var splits = l.Split(' ');
+            return splits.Length == 1 ? (Op.Noop, 0) : (Op.AddX, int.Parse(splits[1]));
         }
     }
 }
