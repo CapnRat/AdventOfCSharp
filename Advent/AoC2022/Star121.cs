@@ -32,38 +32,7 @@ namespace Advent.AoC2022
         
         public override int Run(string input)
         {
-            int y = 0;
-            int width = 0;
-            int height = 0;
-            int start = 0;
-            int end = 0;
-
-            var grid = new List<int>();
-            foreach (var line in Utility.InputToLines(input))
-            {
-                if (y == 0)
-                    width = line.Length;
-
-                for (var i = 0; i < line.Length; i++)
-                {
-                    int elevation = line[i];
-                    switch (line[i])
-                    {
-                        case 'S':
-                            start = PositionToIndex(i, y, width);
-                            elevation = 'a';
-                            break;
-                        case 'E':
-                            end = PositionToIndex(i, y, width);
-                            elevation = 'z';
-                            break;
-                    }
-                    grid.Add(elevation);
-                }
-
-                y++;
-            }
-            height = y;
+            var grid = InputToGrid(input, out var width, out var height, out var start, out var end);
 
             var visited = new HashSet<int> { start };
             var heads = new HashSet<int> { start };
@@ -89,6 +58,44 @@ namespace Advent.AoC2022
 
                 heads = newHeads;
             }
+        }
+
+        public static List<int> InputToGrid(string input, out int width, out int height, out int start, out int end)
+        {
+            width = 0;
+            start = 0;
+            end = 0;
+
+            int y = 0;
+            var grid = new List<int>();
+            foreach (var line in Utility.InputToLines(input))
+            {
+                if (y == 0)
+                    width = line.Length;
+
+                for (var i = 0; i < line.Length; i++)
+                {
+                    int elevation = line[i];
+                    switch (line[i])
+                    {
+                        case 'S':
+                            start = PositionToIndex(i, y, width);
+                            elevation = 'a';
+                            break;
+                        case 'E':
+                            end = PositionToIndex(i, y, width);
+                            elevation = 'z';
+                            break;
+                    }
+
+                    grid.Add(elevation);
+                }
+
+                y++;
+            }
+            height = y;
+
+            return grid;
         }
     }
 }
