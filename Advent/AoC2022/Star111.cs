@@ -6,12 +6,39 @@ using Advent.Common;
 namespace Advent.AoC2022
 {
     [Solution(22, 11, 1)]
-    public class Star111 : Solution<int>
+    public class Star111 : Solution<ulong>
     {
-        public override int Run(string input)
+        public override ulong Run(string input)
+        {
+            var monkeys = InputToMonkeys(input);
+
+            for (int i = 0; i < 20; i++)
+            {
+                foreach (var monkey in monkeys)
+                {
+                    while (monkey.Items.Count > 0)
+                    {
+                        var item = monkey.Items.Dequeue();
+                        monkey.ApplyOperation(ref item);
+                        item /= 3;
+                        var target = monkey.GetTargetMonkey(item);
+                        monkeys[target].Items.Enqueue(item);
+                    }
+                }
+            }
+
+            return GetMonkeyBusinessLevel(monkeys);
+        }
+
+        public static ulong GetMonkeyBusinessLevel(List<Monkey> monkeys)
+        {
+            return monkeys.Select(m => m.InspectionCount).OrderBy(x => x).TakeLast(2).Aggregate((ulong)1, (x, y) => x * y);
+        }
+
+        public static List<Monkey> InputToMonkeys(string input)
         {
             var monkeys = new List<Monkey>();
-            
+
             foreach (var line in Utility.InputToLines(input))
             {
                 var splits = line.Trim().Split(' ');
@@ -46,21 +73,7 @@ namespace Advent.AoC2022
                 }
             }
 
-            for (int i = 0; i < 20; i++)
-            {
-                foreach (var monkey in monkeys)
-                {
-                    while (monkey.Items.Count > 0)
-                    {
-                        var item = monkey.Items.Dequeue();
-                        monkey.ApplyOperation(ref item);
-                        var target = monkey.GetTargetMonkey(item);
-                        monkeys[target].Items.Enqueue(item);
-                    }
-                }
-            }
-
-            return monkeys.Select(m => m.InspectionCount).OrderBy(x => x).TakeLast(2).Aggregate(1, (x, y) => x * y);
+            return monkeys;
         }
 
         public class Monkey
@@ -73,7 +86,7 @@ namespace Advent.AoC2022
                 MultSelf
             }
             
-            public int InspectionCount { get; private set; }
+            public ulong InspectionCount { get; private set; }
             public Queue<ulong> Items { get; } = new();
             public Op Operator { get; set; }
             public ulong OpValue { get; set; }
@@ -102,8 +115,6 @@ namespace Advent.AoC2022
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                item /= 3;
             }
 
             public int GetTargetMonkey(ulong item)

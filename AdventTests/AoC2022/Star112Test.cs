@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace AdventTests.AoC2022
 {
-    public class Star111Test : SolutionTest<Star111>
+    public class Star112Test : SolutionTest<Star112>
     {
         [TestCase(@"Monkey 0:
   Starting items: 79, 98
@@ -31,7 +31,7 @@ Monkey 3:
   Operation: new = old + 3
   Test: divisible by 17
     If true: throw to monkey 0
-    If false: throw to monkey 1", (ulong)10605)]
+    If false: throw to monkey 1", 2713310158)]
         public void ExampleTests(string input, ulong expected)
         {
             Run(input, expected);
