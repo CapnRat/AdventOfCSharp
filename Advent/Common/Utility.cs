@@ -25,4 +25,12 @@ namespace Advent.Common
             return InputToLines(input).Select(func);
         }
     }
+
+    public enum Direction
+    {
+        Up,
+        Right,
+        Down,
+        Left
+    }
 }
