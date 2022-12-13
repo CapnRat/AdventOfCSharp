@@ -1,6 +1,7 @@
-﻿using System.Linq;
-using Advent.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
+using Advent.Common;
 
 namespace Advent.AoC2022
 {
@@ -12,10 +13,13 @@ namespace Advent.AoC2022
             var token1 = JArray.Parse("[[2]]");
             var token2 = JArray.Parse("[[6]]");
             
-            var list = Utility.InputToLines(input).Where(l => !string.IsNullOrEmpty(l)).Select(JArray.Parse).ToList();
-            list.Add(token1);
-            list.Add(token2);
-            list.Sort(Star131.Compare);
+            var list = Utility.InputToLines(input)
+                .Where(l => !string.IsNullOrEmpty(l))
+                .Select(JArray.Parse)
+                .Append(token1)
+                .Append(token2)
+                .OrderBy(x => x, Comparer<JArray>.Create(Star131.Compare))
+                .ToList();
 
             return (list.IndexOf(token1) + 1) * (list.IndexOf(token2) + 1);
         }
