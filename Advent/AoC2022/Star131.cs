@@ -8,19 +8,12 @@ namespace Advent.AoC2022
     [Solution(22, 13, 1)]
     public class Star131 : Solution<int>
     {
-        public static dynamic JTokenToType(JToken token) => token switch
-        {
-            JArray array => array,
-            JValue value => value,
-            _ => throw new NotImplementedException()
-        };
-        
         public static int Compare(JArray left, JArray right)
         {
             var count = Math.Min(left.Count, right.Count);
             for (int i = 0; i < count; i++)
             {
-                var result = Compare(JTokenToType(left[i]), JTokenToType(right[i]));
+                var result = Compare(left[i] as dynamic, right[i] as dynamic);
                 if (result == 0)
                     continue;
                 return result;
