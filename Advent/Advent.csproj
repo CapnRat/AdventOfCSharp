@@ -14,6 +14,7 @@
     <ItemGroup>
       <PackageReference Include="Combinatorics" Version="2.0.0" />
       <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
+      <PackageReference Include="Json.Net" Version="1.0.33" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
