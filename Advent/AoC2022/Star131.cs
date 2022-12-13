@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Advent.Common;
 using Newtonsoft.Json.Linq;
 
@@ -7,18 +8,12 @@ namespace Advent.AoC2022
     [Solution(22, 13, 1)]
     public class Star131 : Solution<int>
     {
-        public static dynamic JTokenToType(JToken token)
+        public static dynamic JTokenToType(JToken token) => token switch
         {
-            switch (token)
-            {
-                case JArray array:
-                    return array;
-                case JValue value:
-                    return value;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
+            JArray array => array,
+            JValue value => value,
+            _ => throw new NotImplementedException()
+        };
         
         public static int Compare(JArray left, JArray right)
         {
@@ -34,34 +29,20 @@ namespace Advent.AoC2022
             return left.Count.CompareTo(right.Count);
         }
 
-        public static int Compare(JValue left, JValue right)
-        {
-            return left.CompareTo(right);
-        }
-
-        public static int Compare(JArray left, JValue right)
-        {
-            return Compare(left, new JArray(right));
-        }
-
-        public static int Compare(JValue left, JArray right)
-        {
-            return Compare(new JArray(left), right);
-        }
+        public static int Compare(JValue left, JValue right) => left.CompareTo(right);
+        public static int Compare(JArray left, JValue right) => Compare(left, new JArray(right));
+        public static int Compare(JValue left, JArray right) => Compare(new JArray(left), right);
         
         public override int Run(string input)
         {
             int orderedSum = 0;
             
-            dynamic left = null;
+            JArray left = null;
             int pair = 1;
-            foreach (var line in Utility.InputToLines(input))
+            foreach (var data in Utility.InputToLines(input)
+                         .Where(l => !string.IsNullOrEmpty(l))
+                         .Select(JArray.Parse))
             {
-                if (string.IsNullOrEmpty(line))
-                    continue;
-                
-                dynamic data = JArray.Parse(line);
-
                 if (left == null)
                 {
                     left = data;
