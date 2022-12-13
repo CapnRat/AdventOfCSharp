@@ -7,7 +7,7 @@ namespace Advent.AoC2022
     [Solution(22, 13, 1)]
     public class Star131 : Solution<int>
     {
-        public dynamic JTokenToType(JToken token)
+        public static dynamic JTokenToType(JToken token)
         {
             switch (token)
             {
@@ -20,7 +20,7 @@ namespace Advent.AoC2022
             }
         }
         
-        public int Compare(JArray left, JArray right)
+        public static int Compare(JArray left, JArray right)
         {
             var count = Math.Min(left.Count, right.Count);
             for (int i = 0; i < count; i++)
@@ -34,17 +34,17 @@ namespace Advent.AoC2022
             return left.Count.CompareTo(right.Count);
         }
 
-        public int Compare(JValue left, JValue right)
+        public static int Compare(JValue left, JValue right)
         {
             return left.CompareTo(right);
         }
 
-        public int Compare(JArray left, JValue right)
+        public static int Compare(JArray left, JValue right)
         {
             return Compare(left, new JArray(right));
         }
 
-        public int Compare(JValue left, JArray right)
+        public static int Compare(JValue left, JArray right)
         {
             return Compare(new JArray(left), right);
         }
