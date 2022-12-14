@@ -26,6 +26,55 @@ namespace Advent.Common
         }
     }
 
+    public struct Position : IEquatable<Position>
+    {
+        public int X;
+        public int Y;
+        
+        public bool Equals(Position other)
+        {
+            return X == other.X && Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Position other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
+
+        public static bool operator ==(Position left, Position right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Position left, Position right)
+        {
+            return !left.Equals(right);
+        }
+        
+        public static Position operator +(Position left, Position right)
+        {
+            return new Position { X = left.X + right.X, Y = left.Y + right.Y };
+        }
+        
+        public static Position operator -(Position left, Position right)
+        {
+            return new Position { X = left.X - right.X, Y = left.Y - right.Y };
+        }
+
+        public static implicit operator Position((int, int) tuple) =>
+            new() { X = tuple.Item1, Y = tuple.Item2 };
+
+        public override string ToString()
+        {
+            return $"{nameof(X)}: {X}, {nameof(Y)}: {Y}";
+        }
+    }
+
     public enum Direction
     {
         Up,
