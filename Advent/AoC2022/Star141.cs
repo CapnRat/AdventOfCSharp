@@ -8,15 +8,25 @@ namespace Advent.AoC2022
     [Solution(22, 14, 1)]
     public class Star141 : Solution<int>
     {
-        private static readonly (int X, int Y)[] FallTests = new[] { (0, 1), (-1, 1), (1, 1) };
-        private static readonly Position SandEmitPosition = (500, 0);
+        private static readonly (int X, int Y)[] FallTests = { (0, 1), (-1, 1), (1, 1) };
+        public static readonly Position SandEmitPosition = (500, 0);
 
         public override int Run(string input)
         {
-            var rocks = new HashSet<Position>();
-            var sand = new HashSet<Position>();
+            var rocks = ConstructRockGrid(input, out var bounds);
 
-            (Position TopLeft, Position BottomRight) bounds = (SandEmitPosition, SandEmitPosition);
+            var sand = SimulateSand(ref bounds, rocks);
+
+            PrintGrid(bounds, rocks, sand, SandEmitPosition);
+
+            return sand.Count;
+        }
+
+        public static IReadOnlySet<Position> ConstructRockGrid(string input, out (Position TopLeft, Position BottomRight) bounds)
+        {
+            var rocks = new HashSet<Position>();
+
+            bounds = (SandEmitPosition, SandEmitPosition);
 
             foreach (var line in Utility.InputToLines(input))
             {
@@ -30,7 +40,7 @@ namespace Advent.AoC2022
                 {
                     var prev = positions[p - 1];
                     var curr = positions[p];
-                    
+
                     (int X, int Y) stepDirection = (Math.Sign(prev.X - curr.X), Math.Sign(prev.Y - curr.Y));
 
                     rocks.Add(curr);
@@ -44,15 +54,13 @@ namespace Advent.AoC2022
                 }
             }
 
-            SimulateSand(bounds, rocks, sand);
-
-            PrintGrid(bounds, rocks, sand, SandEmitPosition);
-
-            return sand.Count;
+            return rocks;
         }
 
-        private static void SimulateSand((Position TopLeft, Position BottomRight) bounds, IReadOnlySet<Position> rocks, ISet<Position> sand)
+        public static IReadOnlySet<Position> SimulateSand(ref (Position TopLeft, Position BottomRight) bounds, IReadOnlySet<Position> rocks, int? floor = null)
         {
+            var sand = new HashSet<Position>();
+
             while (true)
             {
                 var grain = SandEmitPosition;
@@ -65,28 +73,38 @@ namespace Advent.AoC2022
                         var testPosition = grain + test;
                         if (rocks.Contains(testPosition) || sand.Contains(testPosition)) continue;
 
+                        if (floor != null && testPosition.Y >= floor) continue;
+
                         grain = testPosition;
                         break;
                     }
 
-                    if (grain.Y > bounds.BottomRight.Y)
-                        return;
+                    if (floor == null && grain.Y > bounds.BottomRight.Y)
+                        return sand;
                 } while (grain != lastPos);
 
                 sand.Add(grain);
+                UpdateBounds(ref bounds, grain);
+
+                if (floor != null && grain == SandEmitPosition)
+                    return sand;
             }
         }
 
-        private static void PrintGrid((Position TopLeft, Position BottomRight) bounds, HashSet<Position> rocks, HashSet<Position> sand,
-            Position sandEmitPosition)
+        public static void PrintGrid((Position TopLeft, Position BottomRight) bounds, IReadOnlySet<Position> rocks, IReadOnlySet<Position> sand,
+            Position sandEmitPosition, int? floor = null)
         {
+            if (floor != null)
+                UpdateBounds(ref bounds, (bounds.BottomRight.X, floor.Value));
+            
             for (int y = bounds.TopLeft.Y; y <= bounds.BottomRight.Y; y++)
             {
-                for (int x = bounds.TopLeft.X; x <= bounds.BottomRight.X; x++)
+                for (int x = bounds.TopLeft.X - 1; x <= bounds.BottomRight.X + 1; x++)
                 {
                     Position pos = (x, y);
                     var character = rocks.Contains(pos) ? '#' : sand.Contains(pos) ? 'o' : '.';
                     character = sandEmitPosition == pos ? '+' : character;
+                    character = floor == y ? '#' : character;
                     Console.Write(character);
                 }
 
@@ -94,7 +112,7 @@ namespace Advent.AoC2022
             }
         }
 
-        private void UpdateBounds(ref (Position TopLeft, Position BottomRight) bounds, Position curr)
+        public static void UpdateBounds(ref (Position TopLeft, Position BottomRight) bounds, Position curr)
         {
             bounds.TopLeft.X = Math.Min(bounds.TopLeft.X, curr.X);
             bounds.TopLeft.Y = Math.Min(bounds.TopLeft.Y, curr.Y);
